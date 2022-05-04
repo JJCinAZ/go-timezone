@@ -1,4 +1,5 @@
 //go:build darwin || linux
+// +build darwin linux
 
 package timezone
 
@@ -10,8 +11,6 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
-
-	"github.com/yookoala/realpath"
 )
 
 var timezoneRegex = regexp.MustCompile(`^\s*(TIMEZONE|ZONE)\s*=\s*\"(?P<tz>.*)\"$`)
@@ -194,7 +193,7 @@ func resolveTimezones(timezones []string, zoneinfo string) (string, error) {
 
 	for _, tzname := range timezones {
 		// look them up in '/usr/share/zoneinfo', and find what they really point to
-		path, err := realpath.Realpath(filepath.Join(zoneinfo, tzname))
+		path, err := realpath(filepath.Join(zoneinfo, tzname))
 		if err != nil {
 			continue
 		}
